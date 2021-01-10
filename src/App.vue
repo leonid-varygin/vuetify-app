@@ -2,20 +2,28 @@
   <v-app id="inspire">
     <v-navigation-drawer
       v-model="drawer"
+      :mobile-breakpoint="768"
       app
     >
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="title">
-            Vuetify Todo
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            Best Todo Ever!
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
+      <v-img
+        class="pa-4 pt-7"
+        src="mountains.jpg"
+        height="170"
+        gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
+      >
+        <v-avatar size="70" class="mb-2">
+          <img
+            src="https://avatars1.githubusercontent.com/u/39562139?s=460&u=9654c727f6fe9d2277ab9c74c9be04d79f0acd48&v=4"
+            alt="Leonid Varygin"
+          >
+        </v-avatar>
+        <div class="white--text text-subtitle-1 font-weight-bold">
+          Leonid Varygin
+        </div>
+        <div class="white--text text-subtitle-2">
+          leonid_varygin
+        </div>
+      </v-img>
 
       <v-list
         dense
@@ -44,22 +52,31 @@
       dark
       src="mountains.jpg"
       prominent
+      :height="$route.path === '/' ? '238' : '170'"
     >
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
+          gradient="to top right, rgba(19,84,122,.9), rgba(128,208,199,.9)"
         ></v-img>
       </template>
 
-      <v-container class="pa-0">
+      <v-container class="header-container pa-0">
         <v-row>
           <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
           <v-spacer></v-spacer>
           <search />
         </v-row>
         <v-row>
-          <v-toolbar-title class="ml-4">Vuetify Todo</v-toolbar-title>
+          <v-toolbar-title class="text-h4 ml-4">
+            {{ $store.state.appTitle }}
+          </v-toolbar-title>
+        </v-row>
+        <v-row>
+          <live-date-time />
+        </v-row>
+        <v-row v-if="$route.path === '/'">
+          <field-add-task />
         </v-row>
       </v-container>
 
@@ -81,9 +98,19 @@
         { title: 'About', icon: 'mdi-help-box', to: '/about' },
       ],
     }),
+    mounted() {
+      this.$store.dispatch('getTasks')
+    },
     components: {
       'search': require('@/components/Tools/Search.vue').default,
+      'live-date-time': require('@/components/Tools/LiveDateTime.vue').default,
+      'field-add-task': require('@/components/Todo/FieldAddTask.vue').default,
       'snackbar': require('@/components/Shared/Snackbar.vue').default
     }
   }
 </script>
+
+<style lang="sass">
+  .header-container
+    max-width: none
+</style>
